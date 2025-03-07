@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!--xmlns声明当前的html是一个模板，其语法是来源于thymeleaf官网-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher</title>
+</head>
+<body>
+    <!--th是thymeleaf的缩写，
+    text="${name}"的意思是p的文本是一个变量，"${name}"里面的就是表达式，
+    就是从model中取到的对应变量的值，到时候会直接进行替换-->
+    <p th:text="${name}"></p>
+    <p th:text="${age}"></p>
+</body>
+</html>
