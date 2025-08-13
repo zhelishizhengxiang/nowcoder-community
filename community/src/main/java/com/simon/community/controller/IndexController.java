@@ -1,4 +1,4 @@
-package org.simom.community.controller;
+package com.simon.community.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

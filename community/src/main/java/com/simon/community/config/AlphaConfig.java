@@ -1,4 +1,4 @@
-package org.simom.community.config;
+package com.simon.community.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
