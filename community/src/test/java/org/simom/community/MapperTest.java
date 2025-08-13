@@ -1,9 +1,10 @@
 package org.simom.community;
 
-import org.junit.jupiter.api.Test;
 import com.simon.community.CommunityApplication;
+import com.simon.community.dao.DiscussPostMapper;
 import com.simon.community.dao.UserMapper;
 import com.simon.community.pojo.User;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,6 +17,9 @@ public class MapperTest {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private DiscussPostMapper discussPostMapper;
 
     @Test
     public void testSelect(){
@@ -35,5 +39,15 @@ public class MapperTest {
     @Test
     public void testUpdate(){
         System.out.println(userMapper.updateStatus(1,0));
+    }
+
+    @Test
+    public void testSelectPosts(){
+        discussPostMapper.selectDiscussPosts(0, 0, 10).forEach(System.out::println);
+        discussPostMapper.selectDiscussPosts(0,10,10).forEach(System.out::println);
+        System.out.println(discussPostMapper.selectDiscussPostsCount(0));
+
+        discussPostMapper.selectDiscussPosts(149, 0, 10).forEach(System.out::println);
+        System.out.println(discussPostMapper.selectDiscussPostsCount(149));
     }
 }
