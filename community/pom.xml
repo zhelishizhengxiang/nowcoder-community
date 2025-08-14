@@ -69,6 +69,18 @@
             <artifactId>lombok</artifactId>
             <scope>annotationProcessor</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <!--提供了一系列通用的、可复用的工具方法，
+        用于简化 Java 开发中一些常见的、重复性的编码任务，
+        涵盖字符串处理、数组操作、日期时间处理、对象操作等多个方面-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.18.0</version>
+        </dependency>
 
     </dependencies>
 

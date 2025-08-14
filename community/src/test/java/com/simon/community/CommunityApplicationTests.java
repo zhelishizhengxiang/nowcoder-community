@@ -1,4 +1,4 @@
-package org.simom.community;
+package com.simon.community;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeansException;

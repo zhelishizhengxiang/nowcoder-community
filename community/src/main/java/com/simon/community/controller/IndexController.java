@@ -30,8 +30,9 @@ public class IndexController {
 
     /**
      * 获取主页数据,通过page来封装请求数据
-     * */
-    @RequestMapping(value = "/index" ,method = RequestMethod.GET)
+     *
+     */
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String getIndexpage(Model model, Page page) {
         //获取数据总数和路径
         page.setRows(discussPostService.findDiscussPostsCount(0));
@@ -39,17 +40,17 @@ public class IndexController {
 
         List<DiscussPost> discussPosts = discussPostService.findDiscussPosts(0, page.getOffset(), page.getPageSize());
         //装入帖子和发帖子的人的数据
-        List<Map<String,Object>> mapList = new ArrayList<>();
-        if(discussPosts!=null&&discussPosts.size()>0){
-            for(DiscussPost discussPost:discussPosts){
-                Map<String,Object> map = new HashMap<>();
-                map.put("post",discussPost);
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if (discussPosts != null && discussPosts.size() > 0) {
+            for (DiscussPost discussPost : discussPosts) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("post", discussPost);
                 User user = userService.findUserById(discussPost.getUserId());
-                map.put("user",user);
+                map.put("user", user);
                 mapList.add(map);
             }
         }
-        model.addAttribute("discussPosts",mapList);
+        model.addAttribute("discussPosts", mapList);
         return "index";
     }
 }

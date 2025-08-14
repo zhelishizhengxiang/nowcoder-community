@@ -1,4 +1,4 @@
-package org.simom.community;
+package com.simon.community;
 
 import com.simon.community.CommunityApplication;
 import com.simon.community.dao.DiscussPostMapper;

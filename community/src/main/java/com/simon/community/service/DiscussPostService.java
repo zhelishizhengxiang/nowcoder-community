@@ -19,7 +19,7 @@ public class DiscussPostService {
 
 
     /**
-     * 查询某页的数据，并且讲user_id转换为username
+     * 查询某页的数据
      */
     public List<DiscussPost> findDiscussPosts(int userId,int offset,int limit){
         return discussPostMapper.selectDiscussPosts(userId,offset,limit);
