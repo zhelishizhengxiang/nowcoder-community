@@ -1,6 +1,8 @@
 package com.simon.community.service;
 
+import com.simon.community.dao.LoginTicketMapper;
 import com.simon.community.dao.UserMapper;
+import com.simon.community.pojo.LoginTicket;
 import com.simon.community.pojo.User;
 import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.CommunityUtil;
@@ -9,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -42,6 +45,9 @@ public class UserService  implements CommunityConstant {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
+
     /**
      * 根据id查询用户
      *
@@ -55,7 +61,8 @@ public class UserService  implements CommunityConstant {
      * @purpose 注册用户
      *
      */
-    public Map registerUser(User user) {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String,Object> registerUser(User user) {
         HashMap<String, Object> map = new HashMap<>();
         //判断注册信息是否符合要求
         if (user == null) {
@@ -108,6 +115,7 @@ public class UserService  implements CommunityConstant {
      * @purpose 激活用户
      * @return 是否激活成功
      */
+    @Transactional(rollbackFor = Exception.class)
     public int activate(int id,String activationCode) {
         User user = userMapper.selectById(id);
         if (user.getStatus()==1) {
@@ -118,5 +126,61 @@ public class UserService  implements CommunityConstant {
         }else{
             return ACTIVATION_FAILURE;
         }
+    }
+
+
+    /**
+     * @purpose 用户登录,验证码在controller判断，因为controller可以拿到session
+     * @param password 密码（未加密）
+     * @param expiredSecond  凭证过期时间
+     * */
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String,Object> login(String username,String password,int expiredSecond) {
+        Map<String,Object> map = new HashMap<>();
+        if (StringUtils.isBlank(username)) {
+            map.put("usernameMsg","账号不能为空");
+            return map;
+        }
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg","密码不能为空");
+            return map;
+        }
+        //验证账号
+        User user = userMapper.selectByName(username);
+        if(user==null){
+            map.put("usernameMsg","该账号不存在");
+            return map;
+        }
+        //验证激活状态
+        if(user.getStatus()==0){
+            map.put("usernameMsg","该账号未激活");
+            return map;
+        }
+        //验证密码
+        password=CommunityUtil.md5(password+user.getSalt());
+        if(!user.getPassword().equals(password)){
+            map.put("passwordMsg","密码不正确");
+            return map;
+        }
+
+        //登陆成功，生成登录凭证，维持登录状态
+        LoginTicket ticket = new LoginTicket();
+        ticket.setUserId(user.getId());
+        ticket.setStatus(0);
+        ticket.setTicket(CommunityUtil.generateUUID());
+        ticket.setExpired(new Date(System.currentTimeMillis() + expiredSecond*1000));
+        loginTicketMapper.insertLoginTicket(ticket);
+        //需要把凭证返回给客户端，客户端需要留存
+        map.put("ticket",ticket.getTicket());
+        return map;
+    }
+
+    /**
+     * 退出登录
+     * @param ticket 传过来的凭证
+     * */
+    @Transactional(rollbackFor = Exception.class)
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket,1);
     }
 }

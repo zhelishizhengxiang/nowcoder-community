@@ -1,17 +1,22 @@
 package com.simon.community;
 
-import com.simon.community.CommunityApplication;
 import com.simon.community.dao.DiscussPostMapper;
+import com.simon.community.dao.LoginTicketMapper;
 import com.simon.community.dao.UserMapper;
+import com.simon.community.pojo.LoginTicket;
 import com.simon.community.pojo.User;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Date;
 
 /**
  * @author zhengx
  * @version 1.0
  */
+@Slf4j
 @SpringBootTest(classes = CommunityApplication.class)
 public class MapperTest {
 
@@ -20,6 +25,9 @@ public class MapperTest {
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Test
     public void testSelect(){
@@ -50,4 +58,25 @@ public class MapperTest {
         discussPostMapper.selectDiscussPosts(149, 0, 10).forEach(System.out::println);
         System.out.println(discussPostMapper.selectDiscussPostsCount(149));
     }
+
+    @Test
+    public void testInsertLoginTicket(){
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setTicket("123456");
+        loginTicket.setUserId(50);
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis()+1000*60*10));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+    }
+
+    @Test
+    public void testSelectLoginTicket(){
+        LoginTicket ticket = loginTicketMapper.selectByTicket("123456");
+        if(ticket!=null){
+            loginTicketMapper.updateStatus(ticket.getTicket(),1);
+        }
+        LoginTicket ticket1 = loginTicketMapper.selectByTicket("123456");
+        System.out.println(ticket1.getStatus());
+    }
+
 }

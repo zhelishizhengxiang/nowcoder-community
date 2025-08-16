@@ -20,4 +20,14 @@ public interface CommunityConstant {
      * 激活失败
      * */
     int ACTIVATION_FAILURE =2;
+
+    /**
+     * 默认状态的登陆凭证的有效时间,单位秒
+     * */
+    int DEFAULT_EXPIRED_SECONDS=3600*12;
+
+    /**
+     * 记住我状态下的登陆凭证的有效时间,单位秒
+     * */
+    int REMEMBER_EXPIRED_SECONDS=3600*24*30;
 }
