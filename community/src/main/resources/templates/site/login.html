@@ -67,7 +67,7 @@
 					<div class="form-group row">
 						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
 						<div class="col-sm-10">
-							<!--可以直接通过请求参数进行取值，${param.xxx}可以获取 HTTP 请求参数,相当于后端的-->
+							<!--可以直接通过请求参数进行取值，${param.xxx}可以获取 HTTP 请求参数,相当于后端的req.getParamter-->
 							<!--input框的样式显示与否取决于属性中是否有is-valid-->
 							<input type="text" th:class="|form-control ${usernameMsg !=null?'is-invalid':''}|" id="username" name="username"
 								   th:value="${param.username}" placeholder="请输入您的账号!" required>

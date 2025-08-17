@@ -183,4 +183,36 @@ public class UserService  implements CommunityConstant {
     public void logout(String ticket) {
         loginTicketMapper.updateStatus(ticket,1);
     }
+
+
+    /**
+     * 查询凭证
+     * */
+    public LoginTicket findLoginTicket(String ticket){
+        return  loginTicketMapper.selectByTicket(ticket);
+    }
+
+    /**
+     * 修改用户头像
+     * */
+    @Transactional(rollbackFor = Exception.class)
+    public int updateHeaderUrl(String headerUrl,int id) {
+        return userMapper.updateHeaderUrl(id,headerUrl);
+    }
+
+    /**
+     * 修改用户密码
+     * @param password 密码未加密
+     * @param user  需要改密码的用户
+     * */
+    @Transactional(rollbackFor = Exception.class)
+    public int updatePassword(User user,String password) {
+        //传进来的密码未被加密，所以需要获取加密后的密码
+        password=CommunityUtil.md5(password+user.getSalt()).toString();
+        return  userMapper.updatePassword(user.getId(),password);
+    }
+
+
+
+
 }
