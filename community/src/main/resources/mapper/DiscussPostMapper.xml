@@ -37,5 +37,9 @@
       and status!=2
     </where>
   </select>
+    <select id="selectDiscussPostById" resultType="discussPost">
+      select <include refid="Base_DiscussPost_List"></include>
+          from discuss_post where id=#{id};
+    </select>
 
 </mapper>

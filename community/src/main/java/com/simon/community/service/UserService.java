@@ -50,16 +50,14 @@ public class UserService  implements CommunityConstant {
 
     /**
      * 根据id查询用户
-     *
      */
     public User findUserById(int id) {
         return userMapper.selectById(id);
     }
 
     /**
+     * 注册用户
      * @return 返回的信息（错误信息或者成功信息）
-     * @purpose 注册用户
-     *
      */
     @Transactional(rollbackFor = Exception.class)
     public Map<String,Object> registerUser(User user) {
@@ -112,7 +110,7 @@ public class UserService  implements CommunityConstant {
     }
 
     /**
-     * @purpose 激活用户
+     * 激活用户
      * @return 是否激活成功
      */
     @Transactional(rollbackFor = Exception.class)
@@ -130,7 +128,7 @@ public class UserService  implements CommunityConstant {
 
 
     /**
-     * @purpose 用户登录,验证码在controller判断，因为controller可以拿到session
+     * 用户登录,验证码在controller判断，因为controller可以拿到session
      * @param password 密码（未加密）
      * @param expiredSecond  凭证过期时间
      * */

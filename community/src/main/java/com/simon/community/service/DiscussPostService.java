@@ -24,21 +24,21 @@ public class DiscussPostService {
     private SensitiveFilter sensitiveFilter;
 
     /**
-     * @purpose 查询某页的数据
+     *  查询某页的数据
      */
     public List<DiscussPost> findDiscussPosts(int userId,int offset,int limit){
         return discussPostMapper.selectDiscussPosts(userId,offset,limit);
     }
 
     /**
-    * @purpose 查询行数
+    *  查询行数
     * */
     public int findDiscussPostsCount(int userId){
         return discussPostMapper.selectDiscussPostsCount(userId);
     }
 
     /**
-     * @purpose 添加帖子
+     *  添加帖子
      * */
     @Transactional
     public int addDiscussPost(DiscussPost discussPost){
@@ -52,5 +52,12 @@ public class DiscussPostService {
         discussPost.setContent(sensitiveFilter.filter(discussPost.getContent()));
 
         return discussPostMapper.insertDiscussPost(discussPost);
+    }
+
+    /**
+     * 根据id查询帖子数据
+     * */
+    public DiscussPost findDiscussPostById(int id){
+        return discussPostMapper.selectDiscussPostById(id);
     }
 }

@@ -1,17 +1,24 @@
 package com.simon.community.controller;
 
+import com.simon.community.pojo.Comment;
 import com.simon.community.pojo.DiscussPost;
+import com.simon.community.pojo.Page;
 import com.simon.community.pojo.User;
+import com.simon.community.service.CommentService;
 import com.simon.community.service.DiscussPostService;
+import com.simon.community.service.UserService;
+import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.CommunityUtil;
 import com.simon.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author zhengx
@@ -19,14 +26,20 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/discussPost")
-public class DiscussPostController {
+public class DiscussPostController implements CommunityConstant {
 
     @Autowired
     private DiscussPostService discussPostService;
 
+    @Autowired
+    private UserService userService;
+
     //获取当前用户
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private CommentService commentService;
 
     @RequestMapping(value = "/add" ,method = RequestMethod.POST)
     @ResponseBody
@@ -48,5 +61,67 @@ public class DiscussPostController {
         post.setCommentCount(0);
         discussPostService.addDiscussPost(post);
         return CommunityUtil.getJSONString(200,"发布成功");
+    }
+
+    /**
+     * 查看帖子详情和对应评论数据
+     * */
+    @RequestMapping(value = "/detail/{id}",method = RequestMethod.GET)
+    public String getDiscussPost(@PathVariable("id") int id, Model model, Page page){
+        DiscussPost post = discussPostService.findDiscussPostById(id);
+        model.addAttribute("post",post);
+        //查询user，得到用户名
+        User user = userService.findUserById(post.getUserId());
+        model.addAttribute("user",user);
+
+        //查评论的分页信息
+        page.setPageSize(5);
+        page.setPath("/discussPost/detail/"+post.getId());
+        //直接从帖子里取评论总数
+        page.setRows(post.getCommentCount());
+
+        //评论：给帖子的评论
+        //回复：给评论的评论
+        //评论列表
+        List<Comment> commentList = commentService.findCommentByEntity(
+                ENTITY_TYPE_POST, post.getId(), page.getOffset(), page.getPageSize());
+        //评论VO列表
+        List<Map<String,Object>> commentVoList = new ArrayList<>();
+        if(commentList!=null){
+            for(Comment comment : commentList){
+                //评论Vo
+                Map<String,Object> commentVoMap = new HashMap<>();
+                //评论
+                commentVoMap.put("comment",comment);
+                //评论作者
+                commentVoMap.put("user",userService.findUserById(comment.getUserId()));
+                //回复列表
+                List<Comment> ReplyList = commentService.findCommentByEntity(
+                        ENTITY_TYPE_COMMENT, comment.getId(),0,Integer.MAX_VALUE);
+                List<Map<String,Object>> replyVoList = new ArrayList<>();
+                if(ReplyList!=null){
+                    for(Comment reply : ReplyList){
+                        Map<String,Object> replyVoMap = new HashMap<>();
+                        //回复
+                        replyVoMap.put("reply",reply);
+                        //作者
+                        replyVoMap.put("user",userService.findUserById(reply.getUserId()));
+                        //帖子的评论无指向性，只有回复有指向性
+                        //回复的目标用户
+                        User target = reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
+                        replyVoMap.put("target",target);
+                        replyVoList.add(replyVoMap);
+                    }
+                }
+                commentVoMap.put("replies",replyVoList);
+                //这条评论的回复数量
+                int replyCount = commentService.findCommentCountByEntity(ENTITY_TYPE_COMMENT, comment.getId());
+                commentVoMap.put("replyCount",replyCount);
+                commentVoList.add(commentVoMap);
+            }
+        }
+        model.addAttribute("comments",commentVoList);
+
+        return "/site/discuss-detail";
     }
 }
