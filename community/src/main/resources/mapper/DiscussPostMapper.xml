@@ -15,8 +15,12 @@
   <sql id="Base_DiscussPost_List">
     id, user_id, title, content, type, status, create_time, comment_count, score
   </sql>
+    <insert id="insertDiscussPost">
+      insert into discuss_post
+        values(null,#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score});
+    </insert>
 
-  <!--拉黑的帖子不会去显示,并且根据是否置顶贴和发布时间降序排列-->
+    <!--拉黑的帖子不会去显示,并且根据是否置顶贴和发布时间降序排列-->
   <select id="selectDiscussPosts" resultType="discussPost">
     select <include refid="Base_DiscussPost_List"></include> from discuss_post
         <where>

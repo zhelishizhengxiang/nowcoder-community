@@ -4,9 +4,9 @@ import com.simon.community.pojo.User;
 import org.springframework.stereotype.Component;
 
 /**
+ * 持有用户信息，用于代替session对象
  * @author zhengx
  * @version 1.0
- * @purpose 持有用户信息，用于代替session对象
  */
 @Component
 public class HostHolder {

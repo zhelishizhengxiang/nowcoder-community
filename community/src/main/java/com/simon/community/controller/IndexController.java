@@ -30,7 +30,6 @@ public class IndexController {
 
     /**
      * 获取主页数据,通过page来封装请求数据
-     *
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String getIndexpage(Model model, Page page) {

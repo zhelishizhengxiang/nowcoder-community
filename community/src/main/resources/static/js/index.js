@@ -1,7 +1,9 @@
+//绑定事件
 $(function(){
 	$("#publishBtn").click(publish);
 });
 
+//事件的具体内容
 function publish() {
 	$("#publishModal").modal("hide");
 
@@ -17,7 +19,8 @@ function publish() {
 	var content = $("#message-text").val();
 	// 发送异步请求(POST)
 	$.post(
-	    CONTEXT_PATH + "/discuss/add",
+		//默认传入的是表单的那种形式
+	    CONTEXT_PATH + "/discussPost/add",
 	    {"title":title,"content":content},
 	    function(data) {
 	        data = $.parseJSON(data);
@@ -28,8 +31,8 @@ function publish() {
             // 2秒后,自动隐藏提示框
             setTimeout(function(){
                 $("#hintModal").modal("hide");
-                // 刷新页面
-                if(data.code == 0) {
+                // 刷新页面,看到新数据数据
+                if(data.code == 200) {
                     window.location.reload();
                 }
             }, 2000);
