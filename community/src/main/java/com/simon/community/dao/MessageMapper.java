@@ -7,7 +7,7 @@ import java.util.List;
 public interface MessageMapper {
 
     /**
-     * 查询当前用户的会话列表，并且针对每个绘画只返回最新消息。
+     * 查询当前用户的会话列表，并且针对每个会话只返回最新消息。
      * 系统用户发的消息的from_id为1，为通知
      * */
     List<Message> selectConversations(int userId, int offset, int limit);
@@ -23,7 +23,7 @@ public interface MessageMapper {
     List<Message> selectLetters(String conversationId, int offset,int limit);
 
     /**
-     * 查询某个绘画所包含的私信数量
+     * 查询某个会话所包含的私信数量
      * */
     int selectLettersCount(String conversationId);
 

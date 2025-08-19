@@ -6,11 +6,11 @@
     id, from_id, to_id, conversation_id, content, `status`, create_time
   </sql>
   <select id="selectConversations" resultType="com.simon.community.pojo.Message">
-    select <include refid="Base_Column_List"></include> and count(distinct conversation_id)
+    select <include refid="Base_Column_List"></include>
     from message
     where id in(
-        select max(id) from messege
-        where status!=2 and from_id!=1 and (from_id=#{userId} or to_id=#{toId})
+        select max(id) from message
+        where status!=2 and from_id!=1 and (from_id=#{userId} or to_id=#{userId})
         group by conversation_id
     )
     order by create_time desc
@@ -21,8 +21,8 @@
     select count(id)
     from message
     where id in(
-        select max(id) from messege
-        where status!=2 and from_id!=1 and (from_id=#{userId} or to_id=#{toId})
+        select max(id) from message
+        where status!=2 and from_id!=1 and (from_id=#{userId} or to_id=#{userId})
         group by conversation_id
     )
   </select>
@@ -40,8 +40,8 @@
   </select>
   <select id="selectLetterUnreadCount" resultType="java.lang.Integer">
       select count(id) from message
-      where status!=2
-        and from_id!=1 and to_id=#{userId}
+      where
+         from_id!=1 and to_id=#{userId}
         <if test="conversationId!=null">
             and conversation_id=#{conversationId}
         </if>
