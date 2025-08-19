@@ -20,8 +20,8 @@
         values(null,#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score});
     </insert>
 
-    <!--拉黑的帖子不会去显示,并且根据是否置顶贴和发布时间降序排列-->
-  <select id="selectDiscussPosts" resultType="discussPost">
+  <!--拉黑的帖子不会去显示,并且根据是否置顶贴和发布时间降序排列-->
+  <select id="selectDiscussPosts" resultType="com.simon.community.pojo.DiscussPost">
     select <include refid="Base_DiscussPost_List"></include> from discuss_post
         <where>
         <if test="userId!=0">and user_id=#{userId}</if>
@@ -37,9 +37,16 @@
       and status!=2
     </where>
   </select>
-    <select id="selectDiscussPostById" resultType="discussPost">
+    <select id="selectDiscussPostById" resultType="com.simon.community.pojo.DiscussPost">
       select <include refid="Base_DiscussPost_List"></include>
           from discuss_post where id=#{id};
     </select>
+
+    <update id="updatePostCommentCount">
+      update discuss_post
+      set comment_count=#{commentCount}
+      where id=#{id}
+    </update>
+
 
 </mapper>

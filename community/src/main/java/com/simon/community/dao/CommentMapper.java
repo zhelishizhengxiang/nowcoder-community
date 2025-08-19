@@ -11,5 +11,13 @@ public interface CommentMapper {
      * */
     List<Comment> selectCommentsByEntity(int entityType, int entityId,int offset,int limit);
 
+    /**
+     * 查询实体数量
+     * */
     int selectCountByEntity(int entityType, int entityId);
+
+    /**
+     * 添加评论
+     * */
+    int insertComment(Comment comment);
 }
