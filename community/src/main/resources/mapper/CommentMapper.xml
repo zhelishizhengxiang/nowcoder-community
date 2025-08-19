@@ -5,7 +5,7 @@
   <sql id="Base_Column_List">
     id, user_id, entity_type, entity_id, target_id, content, `status`, create_time
   </sql>
-  <select id="selectCommentsByEntity" resultType="comment">
+  <select id="selectCommentsByEntity" resultType="com.simon.community.pojo.Comment">
     select <include refid="Base_Column_List"></include>
         from comment
         where entity_type=#{entityType} and entity_id=#{entityId} and status=0
