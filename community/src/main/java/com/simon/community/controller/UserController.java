@@ -91,7 +91,6 @@ public class UserController {
     /**
      * 获取头像
      */
-
     @RequestMapping(value = "/header/{filename}", method = RequestMethod.GET)
     public void getHeader(@PathVariable("filename") String filename, HttpServletResponse response)  {
         //去上传路径找对应的图片
