@@ -32,4 +32,14 @@ public interface MessageMapper {
      * */
      int selectLetterUnreadCount(int userId, String conversationId);
 
+
+     /**
+      * 新增消息
+      * */
+     int insertMessage(Message message);
+
+     /**
+      * 更改多条消息状态
+      * */
+     int updateStatus(List<Integer> ids,int status);
 }

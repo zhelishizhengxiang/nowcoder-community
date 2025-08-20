@@ -56,6 +56,13 @@ public class UserService  implements CommunityConstant {
     }
 
     /**
+     * 根据name查询用户
+     * */
+    public User findUserByName(String username) {
+        return userMapper.selectByName(username);
+    }
+
+    /**
      * 注册用户
      * @return 返回的信息（错误信息或者成功信息）
      */
@@ -209,6 +216,7 @@ public class UserService  implements CommunityConstant {
         password=CommunityUtil.md5(password+user.getSalt()).toString();
         return  userMapper.updatePassword(user.getId(),password);
     }
+
 
 
 

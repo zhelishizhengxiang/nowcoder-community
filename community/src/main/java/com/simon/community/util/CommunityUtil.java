@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public class CommunityUtil {
     /**
-     * @purpose 生成随机字符串
+     *  生成随机字符串
      * */
     public  static String generateUUID()
     {
@@ -21,7 +21,7 @@ public class CommunityUtil {
     }
 
     /**
-     * @purpose MD5加密，加密数据
+     *  MD5加密，加密数据
      * @param key 传入的明文
      * */
     public  static String md5(String key){
@@ -33,7 +33,7 @@ public class CommunityUtil {
     }
 
     /**
-     * @usage 封装前后端交互的数据格式
+     *  封装前后端交互的数据格式
      * @param code 状态编码
      * @param msg 提示信息
      * @param map  业务数据

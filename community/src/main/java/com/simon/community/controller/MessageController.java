@@ -5,6 +5,7 @@ import com.simon.community.pojo.Page;
 import com.simon.community.pojo.User;
 import com.simon.community.service.MessageService;
 import com.simon.community.service.UserService;
+import com.simon.community.util.CommunityUtil;
 import com.simon.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhengx
@@ -79,6 +78,7 @@ public class MessageController {
         page.setRows(messageService.findLettersCount(conversationId));
         User user = hostHolder.getUser();
 
+
         //私信列表
         List<Message> lettersList = messageService.findLetters(conversationId, page.getOffset(), page.getPageSize());
         List<Map<String,Object>> letters=new ArrayList<>();
@@ -95,8 +95,29 @@ public class MessageController {
         model.addAttribute("letters",letters);
         //对话用户的信息
         model.addAttribute("targetUser",userService.findUserById(getLetterTargetUser(conversationId)));
+
+        //对该对话中的所有消息进行已读
+        List<Integer> ids = getLetterUnreadIds(lettersList);
+        if(ids!=null&&ids.size()>0){
+            messageService.readMessage(ids);
+        }
         return "/site/letter-detail";
 
+    }
+
+    /**
+     * 获取对方发送给本人得所有消息id
+     * */
+    private List<Integer> getLetterUnreadIds(List<Message> lettersList){
+        List<Integer> ids=new ArrayList<>();
+        if(lettersList!=null&&lettersList.size()>0){
+            for(Message letter:lettersList){
+                if(letter.getStatus()==0 && letter.getToId()==hostHolder.getUser().getId()){
+                    ids.add(letter.getId());
+                }
+            }
+        }
+        return ids;
     }
 
     /**
@@ -107,5 +128,30 @@ public class MessageController {
         int id0=Integer.parseInt(s[0]);
         int id1=Integer.parseInt(s[1]);
         return id0==hostHolder.getUser().getId()?id1:id0;
+    }
+
+    /**
+     * 发送私信
+     * */
+    @RequestMapping(value = "/send",method = RequestMethod.POST)
+    @ResponseBody
+    public String sendLetter(String toName,String content){
+        Message message = new Message();
+        message.setContent(content);
+        message.setFromId(hostHolder.getUser().getId());
+        User toUser = userService.findUserByName(toName);
+        if(toUser==null){
+            return CommunityUtil.getJSONString(403,"目标用户不存在！");
+        }
+        message.setToId(toUser.getId());
+        if(message.getFromId()<message.getToId()){
+            message.setConversationId(message.getFromId()+"_"+message.getToId());
+        }else{
+            message.setConversationId(message.getToId()+"_"+message.getFromId());
+        }
+        message.setStatus(0);
+        message.setCreateTime(new Date());
+        messageService.addMessage(message);
+        return CommunityUtil.getJSONString(200);
     }
 }

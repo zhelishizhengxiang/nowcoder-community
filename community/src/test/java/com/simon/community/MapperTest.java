@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +103,11 @@ public class MapperTest {
         System.out.println(messageMapper.selectLettersCount("111_112"));
 
         System.out.println(messageMapper.selectLetterUnreadCount(131,"111_131"));
+    }
+
+    @Test
+    public void testReadMessage(){
+        messageMapper.updateStatus(Arrays.asList(355,356,357),1);
     }
 
 }

@@ -5,7 +5,8 @@
   <sql id="Base_Column_List">
     id, from_id, to_id, conversation_id, content, `status`, create_time
   </sql>
-  <select id="selectConversations" resultType="com.simon.community.pojo.Message">
+
+    <select id="selectConversations" resultType="com.simon.community.pojo.Message">
     select <include refid="Base_Column_List"></include>
     from message
     where id in(
@@ -47,5 +48,16 @@
         </if>
         and status=0
   </select>
-
+    <insert id="insertMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into message
+        value(null,#{fromId},#{toId},#{conversationId},#{content},#{status},#{createTime});
+    </insert>
+    <update id="updateStatus">
+        update message
+        set status=#{status}
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>
