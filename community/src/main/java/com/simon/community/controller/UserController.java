@@ -3,6 +3,7 @@ package com.simon.community.controller;
 import com.simon.community.annotation.LoginRequired;
 import com.simon.community.controller.interceptor.LoginTicketInterceptor;
 import com.simon.community.pojo.User;
+import com.simon.community.service.LikeService;
 import com.simon.community.service.UserService;
 import com.simon.community.util.CommunityUtil;
 import com.simon.community.util.HostHolder;
@@ -48,8 +49,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private LikeService likeService;
 
     @LoginRequired
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
@@ -140,6 +145,23 @@ public class UserController {
         //此时更新密码
         userService.updatePassword(user,newPassword);
         return "redirect:/index";
-
     }
+
+    /**
+     * 访问个人主页
+     * */
+    @RequestMapping(value = "/profile/{userId}",method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId,Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在");
+        }
+        model.addAttribute("user", user);
+        //查询用户获得赞的数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount",likeCount);
+
+        return "/site/profile";
+    }
+
 }
