@@ -4,7 +4,10 @@ import com.simon.community.pojo.DiscussPost;
 import com.simon.community.pojo.Page;
 import com.simon.community.pojo.User;
 import com.simon.community.service.DiscussPostService;
+import com.simon.community.service.LikeService;
 import com.simon.community.service.UserService;
+import com.simon.community.util.CommunityConstant;
+import com.simon.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +24,17 @@ import java.util.Map;
  * @version 1.0
  */
 @Controller
-public class IndexController {
+public class IndexController implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
+    @Autowired
+    private HostHolder hostHolder;
 
     /**
      * 获取主页数据,通过page来封装请求数据
@@ -46,6 +54,9 @@ public class IndexController {
                 map.put("post", discussPost);
                 User user = userService.findUserById(discussPost.getUserId());
                 map.put("user", user);
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPost.getId());
+                map.put("likeCount", likeCount);
                 mapList.add(map);
             }
         }
