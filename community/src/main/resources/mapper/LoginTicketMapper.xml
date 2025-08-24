@@ -14,7 +14,7 @@
         set status=#{status}
         where ticket=#{ticket}
   </update>
-  <select id="selectByTicket" resultType="loginTicket">
+  <select id="selectByTicket" resultType="com.simon.community.pojo.LoginTicket">
     select <include refid="Base_Column_List"></include> from login_ticket
         where ticket=#{ticket}
   </select>
