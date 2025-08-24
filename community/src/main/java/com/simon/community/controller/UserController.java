@@ -1,10 +1,11 @@
 package com.simon.community.controller;
 
 import com.simon.community.annotation.LoginRequired;
-import com.simon.community.controller.interceptor.LoginTicketInterceptor;
 import com.simon.community.pojo.User;
+import com.simon.community.service.FollowService;
 import com.simon.community.service.LikeService;
 import com.simon.community.service.UserService;
+import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.CommunityUtil;
 import com.simon.community.util.HostHolder;
 import jakarta.servlet.ServletOutputStream;
@@ -32,7 +33,7 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/user")
 @Slf4j
-public class UserController {
+public class UserController implements CommunityConstant {
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
@@ -43,9 +44,6 @@ public class UserController {
     @Value("${community.path.upload}")
     private String uploadPath;
 
-    //需要拿到当前user的具体信息
-    @Autowired
-    private LoginTicketInterceptor loginTicketInterceptor;
 
     @Autowired
     private UserService userService;
@@ -55,6 +53,9 @@ public class UserController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
     @LoginRequired
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
@@ -161,6 +162,18 @@ public class UserController {
         int likeCount = likeService.findUserLikeCount(userId);
         model.addAttribute("likeCount",likeCount);
 
+        //关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount",followeeCount);
+        //粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER,userId);
+        model.addAttribute("followerCount",followerCount);
+        //是否已关注，先判断当前用户是否登录
+        boolean hasFollowed=false;
+        if(hostHolder.getUser()!=null) {
+            hasFollowed= followService.hasFollowed(hostHolder.getUser().getId(),ENTITY_TYPE_USER,userId);
+        }
+        model.addAttribute("hasFollowed",hasFollowed);
         return "/site/profile";
     }
 

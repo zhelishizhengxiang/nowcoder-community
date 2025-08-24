@@ -3,7 +3,7 @@ $(function(){
 });
 
 function follow() {
-	var btn = this;
+	var btn  = this;
 	if($(btn).hasClass("btn-info")) {
 		// 关注TA
 		$.post(
@@ -11,7 +11,7 @@ function follow() {
 		    {"entityType":3,"entityId":$(btn).prev().val()},
 		    function(data) {
 		        data = $.parseJSON(data);
-		        if(data.code == 0) {
+		        if(data.code == 200) {
                     window.location.reload();
 		        } else {
                     alert(data.msg);
@@ -26,7 +26,7 @@ function follow() {
 		    {"entityType":3,"entityId":$(btn).prev().val()},
 		    function(data) {
 		        data = $.parseJSON(data);
-		        if(data.code == 0) {
+		        if(data.code == 200) {
                     window.location.reload();
 		        } else {
                     alert(data.msg);
