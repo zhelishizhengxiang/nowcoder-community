@@ -119,7 +119,7 @@ public class SensitiveFilter {
             cur = cur.getChild(ch);
             if(cur==null){
                 //以slow开始的字符串不是敏感词
-                sb.append(ch);
+                sb.append(text.charAt(slow));
                 cur=root;
                 slow++;
                 fast=slow;

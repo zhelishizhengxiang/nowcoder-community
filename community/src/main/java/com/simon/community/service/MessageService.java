@@ -53,8 +53,37 @@ public class MessageService {
     /**
      * 将多条消息变为已读
      * */
-    public int readMessage(List<Integer> ids){
+    public  int readMessage(List<Integer> ids){
         return messageMapper.updateStatus(ids,1);
+    }
+
+
+    /**
+     * 查询某个主题最新的通知
+     * */
+    public Message findLatestNotice(int userId,String topic){
+        return messageMapper.selectLatestNotice(userId,topic);
+    }
+
+    /**
+     * 查询某个主题的通知总数
+     * */
+    public int findNoticeCount(int userId,String topic){
+        return messageMapper.selectNoticeCount(userId,topic);
+    }
+
+    /**
+     * 查询未读的通知数量
+     * */
+    public int findNoticeUnreadCount(int userId,String topic){
+        return messageMapper.selectNoticeUnreadCount(userId,topic);
+    }
+
+    /**
+     * 分页查询通知
+     * */
+    public List<Message> findNotices(int userId,String  topic,int offset,int limit){
+        return messageMapper.selectNotices(userId,topic,offset,limit);
     }
 
 
