@@ -24,16 +24,16 @@
     create_time
   </sql>
 
-  <select id="selectById" resultType="user">
+  <select id="selectById" resultType="com.simon.community.pojo.User">
       select  <include refid="Base_Column_List"></include>
         from user where id=#{id};
   </select>
 
-  <select id="selectByName" resultType="user">
+  <select id="selectByName" resultType="com.simon.community.pojo.User">
     select  <include refid="Base_Column_List"></include>
         from user where username=#{username};
   </select>
-  <select id="selectByEmail" resultType="user">
+  <select id="selectByEmail" resultType="com.simon.community.pojo.User">
     select <include refid="Base_Column_List"></include>
         from user where email=#{email};
   </select>

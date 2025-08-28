@@ -1,5 +1,7 @@
 package com.simon.community.controller;
 
+import com.simon.community.event.EventProducer;
+import com.simon.community.pojo.Event;
 import com.simon.community.pojo.Page;
 import com.simon.community.pojo.User;
 import com.simon.community.service.FollowService;
@@ -33,12 +35,23 @@ public class FollowController implements CommunityConstant {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(value = "/follow",method = RequestMethod.POST)
     @ResponseBody
     public String follow(int entityType,int entityId){
         User user = hostHolder.getUser();
         //关注用户
         followService.follow(user.getId(),entityType,entityId);
+        //触发关注事件
+        Event event = new Event()
+                .setTopic(TOPIC_FOLLOW)
+                .setUserId(user.getId())
+                .setEntityId(entityId)
+                .setEntityType(entityType)
+                .setEntityUserId(entityId);
+        eventProducer.fireEvent(event);
         return CommunityUtil.getJSONString(200,"已关注");
     }
 
