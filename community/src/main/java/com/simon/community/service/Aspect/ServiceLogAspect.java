@@ -31,6 +31,10 @@ public class ServiceLogAspect {
 
         //获取请求得上下文信息
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        //如果不是同各国controller调用切面就不去记录日志
+        if (requestAttributes == null) {
+            return ;
+        }
         //获取请求对象
         HttpServletRequest request = requestAttributes.getRequest();
         //获取ip地址
