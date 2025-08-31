@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.simon.community.dao.MessageMapper">
+<mapper namespace="com.simon.community.dao.mybatis.MessageMapper">
 
   <sql id="Base_Column_List">
     id, from_id, to_id, conversation_id, content, `status`, create_time

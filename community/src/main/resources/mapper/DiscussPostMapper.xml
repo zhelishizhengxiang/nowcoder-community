@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.simon.community.dao.DiscussPostMapper">
+<mapper namespace="com.simon.community.dao.mybatis.DiscussPostMapper">
   <resultMap id="BaseResultMap" type="com.simon.community.pojo.DiscussPost">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
@@ -15,7 +15,7 @@
   <sql id="Base_DiscussPost_List">
     id, user_id, title, content, type, status, create_time, comment_count, score
   </sql>
-    <insert id="insertDiscussPost">
+    <insert id="insertDiscussPost" keyProperty="id">
       insert into discuss_post
         values(null,#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score});
     </insert>

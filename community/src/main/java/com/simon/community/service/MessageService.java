@@ -1,6 +1,6 @@
 package com.simon.community.service;
 
-import com.simon.community.dao.MessageMapper;
+import com.simon.community.dao.mybatis.MessageMapper;
 import com.simon.community.pojo.Message;
 import com.simon.community.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.simon.community.service;
 
-import com.simon.community.dao.DiscussPostMapper;
+import com.simon.community.dao.mybatis.DiscussPostMapper;
 import com.simon.community.pojo.DiscussPost;
 import com.simon.community.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;

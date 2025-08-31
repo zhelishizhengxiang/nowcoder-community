@@ -1,9 +1,9 @@
 package com.simon.community;
 
-import com.simon.community.dao.DiscussPostMapper;
-import com.simon.community.dao.LoginTicketMapper;
-import com.simon.community.dao.MessageMapper;
-import com.simon.community.dao.UserMapper;
+import com.simon.community.dao.mybatis.DiscussPostMapper;
+import com.simon.community.dao.mybatis.LoginTicketMapper;
+import com.simon.community.dao.mybatis.MessageMapper;
+import com.simon.community.dao.mybatis.UserMapper;
 import com.simon.community.pojo.LoginTicket;
 import com.simon.community.pojo.Message;
 import com.simon.community.pojo.User;

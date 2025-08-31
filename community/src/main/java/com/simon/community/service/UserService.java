@@ -1,7 +1,7 @@
 package com.simon.community.service;
 
-import com.simon.community.dao.LoginTicketMapper;
-import com.simon.community.dao.UserMapper;
+import com.simon.community.dao.mybatis.LoginTicketMapper;
+import com.simon.community.dao.mybatis.UserMapper;
 import com.simon.community.pojo.LoginTicket;
 import com.simon.community.pojo.User;
 import com.simon.community.util.CommunityConstant;

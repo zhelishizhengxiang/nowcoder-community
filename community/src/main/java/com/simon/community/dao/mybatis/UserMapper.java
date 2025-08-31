@@ -1,4 +1,4 @@
-package com.simon.community.dao;
+package com.simon.community.dao.mybatis;
 
 import com.simon.community.pojo.User;
 

@@ -1,9 +1,7 @@
 package com.simon.community.controller;
 
-import com.simon.community.pojo.Comment;
-import com.simon.community.pojo.DiscussPost;
-import com.simon.community.pojo.Page;
-import com.simon.community.pojo.User;
+import com.simon.community.event.EventProducer;
+import com.simon.community.pojo.*;
 import com.simon.community.service.CommentService;
 import com.simon.community.service.DiscussPostService;
 import com.simon.community.service.LikeService;
@@ -45,6 +43,9 @@ public class DiscussPostController implements CommunityConstant {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private EventProducer  eventProducer;
+
     @RequestMapping(value = "/add" ,method = RequestMethod.POST)
     @ResponseBody
     public String addDiscussPost(String title,String content){
@@ -64,6 +65,14 @@ public class DiscussPostController implements CommunityConstant {
         post.setStatus(0);
         post.setCommentCount(0);
         discussPostService.addDiscussPost(post);
+
+        //触发发帖事件，将帖子存入es
+        Event event=new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(post.getId());
+        eventProducer.fireEvent(event);
         return CommunityUtil.getJSONString(200,"发布成功");
     }
 

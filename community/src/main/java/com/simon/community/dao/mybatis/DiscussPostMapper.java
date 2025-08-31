@@ -1,4 +1,4 @@
-package com.simon.community.dao;
+package com.simon.community.dao.mybatis;
 
 import com.simon.community.pojo.DiscussPost;
 import org.apache.ibatis.annotations.Param;
@@ -11,7 +11,7 @@ public interface DiscussPostMapper {
      * 分页查询帖子
      * @param userId "我发布过"会用，正常页面展示不会用
      * */
-    List<DiscussPost> selectDiscussPosts(int userId,int offset,int limit);
+    List<DiscussPost> selectDiscussPosts(Integer userId,int offset,int limit);
 
     /**
      *  查询帖子总数

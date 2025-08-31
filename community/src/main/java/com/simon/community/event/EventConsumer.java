@@ -1,8 +1,11 @@
 package com.simon.community.event;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.simon.community.pojo.DiscussPost;
 import com.simon.community.pojo.Event;
 import com.simon.community.pojo.Message;
+import com.simon.community.service.DiscussPostService;
+import com.simon.community.service.ElasticsearchService;
 import com.simon.community.service.MessageService;
 import com.simon.community.util.CommunityConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +29,17 @@ public class EventConsumer implements CommunityConstant {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private DiscussPostService discussPostService;
+
+    @Autowired
+    private ElasticsearchService  elasticsearchService;
+
     /**
      * 消费事件：给用户发送通知，即向message中插入数据
      * */
     @KafkaListener(topics = {TOPIC_COMMENT,TOPIC_FOLLOW,TOPIC_LIKE})
-    public void ConsumeMessage(ConsumerRecord<?,String> record) {
+    public void consumeMessage(ConsumerRecord<?,String> record) {
         if(record==null || record.value()==null){
             log.error("消息的内容为空");
             return;
@@ -60,6 +69,27 @@ public class EventConsumer implements CommunityConstant {
         message.setContent(JSONObject.toJSONString(content));
 
         messageService.addMessage(message);
+    }
+
+    /**
+     * 消费发帖事件：向es服务器添加或者更新文档
+     * */
+    @KafkaListener(topics = TOPIC_PUBLISH)
+    public void consumePublishMessage(ConsumerRecord<?,String> record) {
+        if(record==null || record.value()==null){
+            log.error("消息的内容为空");
+            return;
+        }
+        Event event = JSONObject.parseObject(record.value(), Event.class);
+        if(event==null){
+            log.error("消息格式错误");
+        }
+
+        //查询到修改或者新增的帖子,存入es服务器
+        DiscussPost post = discussPostService.findDiscussPostById(event.getEntityId());
+        elasticsearchService.saveDiscussPost(post);
+
+
     }
 
 }

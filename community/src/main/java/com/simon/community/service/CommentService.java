@@ -1,6 +1,6 @@
 package com.simon.community.service;
 
-import com.simon.community.dao.CommentMapper;
+import com.simon.community.dao.mybatis.CommentMapper;
 import com.simon.community.pojo.Comment;
 import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.SensitiveFilter;
