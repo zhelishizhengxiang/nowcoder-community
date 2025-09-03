@@ -60,7 +60,7 @@ public interface MessageMapper {
      int selectNoticeUnreadCount(int userId,String topic);
 
      /**
-      * 某个主题所包含的通知数量
+      * 某个主题所包含的通知
       * */
      List<Message> selectNotices(int userId, String topic ,int offset, int limit);
 }

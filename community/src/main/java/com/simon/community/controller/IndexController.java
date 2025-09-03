@@ -68,4 +68,10 @@ public class IndexController implements CommunityConstant {
     public String getErrorpage() {
         return "/error/500";
     }
+
+    //拒绝访问时的提示页面
+    @RequestMapping(value = "denied",method = RequestMethod.GET)
+    public String getDeniedPage() {
+        return "/error/404";
+    }
 }

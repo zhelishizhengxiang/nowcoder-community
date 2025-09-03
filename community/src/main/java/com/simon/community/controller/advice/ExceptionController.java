@@ -26,9 +26,9 @@ public class ExceptionController {
             log.error(stackTraceElement.toString());
         }
         //通过req来判断是普通请求还是异步请求
-        String xRequestPath = request.getHeader("s-requested-with");
+        String xRequestPath = request.getHeader("X-requested-with");
         //异步请求
-        if(xRequestPath.equals("XMLHttpRequest")){
+        if("XMLHttpRequest".equals(xRequestPath)){
             response.setContentType("application/plain;charset=utf-8");
             PrintWriter writer = response.getWriter();
             writer.write(CommunityUtil.getJSONString(500,"服务器异常"));

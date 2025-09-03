@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -171,9 +172,16 @@ public class LoginController implements CommunityConstant {
 
 
     @RequestMapping(value = "/logout" ,method =  RequestMethod.GET)
-    public String logout(@CookieValue("ticket")  String ticket) {
+    public String logout(@CookieValue("ticket")  String ticket, HttpServletResponse response) {
         //通过cookie获得凭证ticket
         userService.logout(ticket);
+        //清理该用户的认证信息
+        SecurityContextHolder.clearContext();
+        // 清楚cookie
+        Cookie cookie = new Cookie("ticket", "");
+        cookie.setPath(contextPath);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         //重定向默认get方法
         return "redirect:/login";
     }

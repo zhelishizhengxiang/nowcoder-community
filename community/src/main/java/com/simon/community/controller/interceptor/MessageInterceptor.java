@@ -5,8 +5,6 @@ import com.simon.community.service.MessageService;
 import com.simon.community.util.HostHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,13 +12,18 @@ import org.springframework.web.servlet.ModelAndView;
  * @author zhengx
  * @version 1.0
  */
-@Component
+//@Component
 public class MessageInterceptor implements HandlerInterceptor {
-    @Autowired
+//    @Autowired
     private MessageService messageService;
 
-    @Autowired
+//    @Autowired
     private HostHolder hostHolder;
+
+    public MessageInterceptor(MessageService messageService, HostHolder hostHolder) {
+        this.messageService = messageService;
+        this.hostHolder = hostHolder;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
