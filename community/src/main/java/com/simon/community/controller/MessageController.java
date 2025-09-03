@@ -116,7 +116,7 @@ public class MessageController implements CommunityConstant {
         List<Integer> ids=new ArrayList<>();
         if(lettersList!=null&&lettersList.size()>0){
             for(Message letter:lettersList){
-                if(letter.getStatus()==0 && letter.getToId()==hostHolder.getUser().getId()){
+                if(letter.getStatus()==0 && letter.getToId().equals(hostHolder.getUser().getId())){
                     ids.add(letter.getId());
                 }
             }

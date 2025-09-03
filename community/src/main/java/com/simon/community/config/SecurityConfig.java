@@ -1,9 +1,9 @@
 package com.simon.community.config;
 
+import com.simon.community.controller.filter.CustomSecurityFilter;
 import com.simon.community.service.UserService;
 import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.CommunityUtil;
-import com.simon.community.util.HostHolder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +33,8 @@ public class SecurityConfig  implements CommunityConstant {
     private UserService userService;
 
     @Autowired
-    private HostHolder hostHolder;
+    private CustomSecurityFilter customSecurityFilter;
+
 
     // 配置忽略特定路径的安全检查，比如静态资源路径
     @Bean
@@ -44,32 +45,22 @@ public class SecurityConfig  implements CommunityConstant {
     // 配置安全过滤链
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-         http
-                 .authorizeHttpRequests(auth -> auth
-                         .requestMatchers("/user/setting",
-                                 "/user/upload",
-                                 "/discussPost/add",
-                                 "/comment/add/**",
-                                 "/letter/**",
-                                 "/notice/**",
-                                 "/like",
-                                 "/follow",
-                                 "/unfollow").authenticated()
-                         .anyRequest().permitAll()//除了上面设置的地址需要登录访问,其它所有的请求地址可与直接访问
-                 )
-                 .formLogin(form -> form.disable()) // 关闭默认表单登录
-                 .addFilterBefore(new CustomSecurityFilter(hostHolder, userService),
-                         UsernamePasswordAuthenticationFilter.class)
-
-//                 .authorizeHttpRequests(auth -> auth
-//                         .requestMatchers("/public/**", "/community/login").permitAll()
-//                         .anyRequest().authenticated()
-//                 )
-//             .httpBasic(basic -> basic.disable()) // 关闭 HTTP Basic 认证
-            // 配置授权规则
-
-//            // 开启CSRF防护（默认开启，可按需配置）
-//                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+        http.authorizeHttpRequests(auth -> auth
+                     .requestMatchers("/user/setting",
+                             "/user/upload",
+                             "/discussPost/add",
+                             "/comment/add/**",
+                             "/letter/**",
+                             "/notice/**",
+                             "/like",
+                             "/follow",
+                             "/unfollow").authenticated()
+                     .anyRequest().permitAll()//除了上面设置的地址需要登录访问,其它所有的请求地址可与直接访问
+             )
+             .formLogin(form -> form.disable()) // 关闭默认表单登录
+             //在spring security认证前执行该过滤器将用户信息加入
+             .addFilterBefore(customSecurityFilter,
+                     UsernamePasswordAuthenticationFilter.class)
 
         //注册自定义的处理器(未认证用户访问需要认证资源的处理器)
             .exceptionHandling(exceptionHandling->{
@@ -118,11 +109,7 @@ public class SecurityConfig  implements CommunityConstant {
 
         //禁用csrf
         http.csrf(csrf->csrf.disable());
-//        // 保证 SecurityContext 自动保存到 Session
-//        http.securityContext(securityContext ->
-//                securityContext.securityContextRepository(new HttpSessionSecurityContextRepository())
-//                        .requireExplicitSave(false)
-//        );
+
 
          return http.build();
     }

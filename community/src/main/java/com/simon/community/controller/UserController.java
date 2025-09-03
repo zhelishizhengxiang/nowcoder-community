@@ -1,6 +1,5 @@
 package com.simon.community.controller;
 
-import com.simon.community.annotation.LoginRequired;
 import com.simon.community.pojo.User;
 import com.simon.community.service.FollowService;
 import com.simon.community.service.LikeService;
@@ -57,13 +56,13 @@ public class UserController implements CommunityConstant {
     @Autowired
     private FollowService followService;
 
-    @LoginRequired
+
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
     }
 
-    @LoginRequired
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String UploadHeader(@RequestParam("headerImage") MultipartFile file, Model model) {
         if (file.isEmpty() || file == null) {
@@ -120,7 +119,6 @@ public class UserController implements CommunityConstant {
 
     }
 
-    @LoginRequired
     @RequestMapping(value="/updatePassword",method = RequestMethod.POST)
     public String updatePassword(String oldPassword,String newPassword,Model model){
         if(oldPassword==null || oldPassword.equals("")){

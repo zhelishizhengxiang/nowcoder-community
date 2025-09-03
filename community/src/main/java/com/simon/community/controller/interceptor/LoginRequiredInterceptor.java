@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
  * @version 1.0
  * @purpose 判断访问的页面是否需要强制登录才能访问的拦截器，如果需要则跳转先去登录
  */
+@Deprecated
 @Component
 public class LoginRequiredInterceptor implements HandlerInterceptor {
 

@@ -177,11 +177,6 @@ public class LoginController implements CommunityConstant {
         userService.logout(ticket);
         //清理该用户的认证信息
         SecurityContextHolder.clearContext();
-        // 清楚cookie
-        Cookie cookie = new Cookie("ticket", "");
-        cookie.setPath(contextPath);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
         //重定向默认get方法
         return "redirect:/login";
     }
