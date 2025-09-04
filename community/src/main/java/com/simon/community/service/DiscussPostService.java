@@ -67,4 +67,18 @@ public class DiscussPostService {
     public int updateCommentCount(int id,int commentCount){
         return discussPostMapper.updatePostCommentCount(id,commentCount);
     }
+
+    /**
+     * 修改帖子类型
+     * */
+    public void updateType(int id,int type){
+        discussPostMapper.updateType(id,type);
+    }
+
+    /**
+     * 修改帖子状态
+     * */
+    public void updateStatus(int id,int status){
+        discussPostMapper.updateStatus(id,status);
+    }
 }

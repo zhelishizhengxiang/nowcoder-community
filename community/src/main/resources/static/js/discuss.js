@@ -1,8 +1,8 @@
-// $(function(){
-//     $("#topBtn").click(setTop);
-//     $("#wonderfulBtn").click(setWonderful);
-//     $("#deleteBtn").click(setDelete);
-// });
+$(function(){
+    $("#topBtn").click(setTop);
+    $("#wonderfulBtn").click(setWonderful);
+    $("#deleteBtn").click(setDelete);
+});
 
 // function like(btn, entityType, entityId, entityUserId, postId) {
 //     $.post(
@@ -37,49 +37,49 @@ function like(btn, entityType, entityId,entityUserId,postId) {
 }
 
 // 置顶
-// function setTop() {
-//     $.post(
-//         CONTEXT_PATH + "/discuss/top",
-//         {"id":$("#postId").val()},
-//         function(data) {
-//             data = $.parseJSON(data);
-//             if(data.code == 0) {
-//                 $("#topBtn").attr("disabled", "disabled");
-//             } else {
-//                 alert(data.msg);
-//             }
-//         }
-//     );
-// }
+function setTop() {
+    $.post(
+        CONTEXT_PATH + "/discussPost/top",
+        {"id":$("#postId").val()},
+        function(data) {
+            data = $.parseJSON(data);
+            if(data.code == 200) {
+                $("#topBtn").attr("disabled", "disabled");
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}
 
 // 加精
-// function setWonderful() {
-//     $.post(
-//         CONTEXT_PATH + "/discuss/wonderful",
-//         {"id":$("#postId").val()},
-//         function(data) {
-//             data = $.parseJSON(data);
-//             if(data.code == 0) {
-//                 $("#wonderfulBtn").attr("disabled", "disabled");
-//             } else {
-//                 alert(data.msg);
-//             }
-//         }
-//     );
-// }
+function setWonderful() {
+    $.post(
+        CONTEXT_PATH + "/discussPost/wonderful",
+        {"id":$("#postId").val()},
+        function(data) {
+            data = $.parseJSON(data);
+            if(data.code == 200) {
+                $("#wonderfulBtn").attr("disabled", "disabled");
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}
 
 // 删除
-// function setDelete() {
-//     $.post(
-//         CONTEXT_PATH + "/discuss/delete",
-//         {"id":$("#postId").val()},
-//         function(data) {
-//             data = $.parseJSON(data);
-//             if(data.code == 0) {
-//                 location.href = CONTEXT_PATH + "/index";
-//             } else {
-//                 alert(data.msg);
-//             }
-//         }
-//     );
-// }
+function setDelete() {
+    $.post(
+        CONTEXT_PATH + "/discussPost/delete",
+        {"id":$("#postId").val()},
+        function(data) {
+            data = $.parseJSON(data);
+            if(data.code == 200) {
+                location.href = CONTEXT_PATH + "/index";
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}

@@ -22,6 +22,12 @@ public class RedisKeyUtil {
 
     private static final String PREFIX_USER="user";
 
+    private static final String PREFIX_UV="uv";
+
+    private static final String PREFIX_DAU="dau";
+
+
+
     /**
      * 生成某个实体的赞的key
      * eg:like:entity:entityType:entityId ->set{userId}
@@ -73,5 +79,33 @@ public class RedisKeyUtil {
      */
     public static String getUserKey(int userId){
         return PREFIX_USER+SPLIT+userId;
+    }
+
+    /**
+     * 生成单日UV的key
+     * */
+    public static String getUvKey(String date){
+        return PREFIX_UV+SPLIT+date;
+    }
+
+    /**
+     * 生成某个时间段内的uv的key
+     * */
+    public static String getUvKey(String startDate,String endDate){
+        return PREFIX_UV+SPLIT+startDate+SPLIT+endDate;
+    }
+
+    /**
+     * 生成单日DAU的key
+     * */
+    public static String getDauKey(String date){
+        return PREFIX_DAU+SPLIT+date;
+    }
+
+    /**
+     * 生成一段时间的活跃哦用的key
+     * */
+    public static String getDauKey(String startDate,String endDate){
+        return PREFIX_DAU+SPLIT+startDate+SPLIT+endDate;
     }
 }

@@ -55,8 +55,13 @@ public class SecurityConfig  implements CommunityConstant {
                              "/like",
                              "/follow",
                              "/unfollow").authenticated()
+                     .requestMatchers("/discussPost/delete",
+                             "/data/**").hasAuthority(AUTHORITY_ADMIN)
+                     .requestMatchers("/discussPost/top",
+                             "/discussPost/wonderful").hasAuthority(AUTHORITY_MODERATOR)
                      .anyRequest().permitAll()//除了上面设置的地址需要登录访问,其它所有的请求地址可与直接访问
              )
+
              .formLogin(form -> form.disable()) // 关闭默认表单登录
              //在spring security认证前执行该过滤器将用户信息加入
              .addFilterBefore(customSecurityFilter,

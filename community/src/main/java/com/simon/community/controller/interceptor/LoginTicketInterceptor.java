@@ -7,6 +7,8 @@ import com.simon.community.util.CookieUtil;
 import com.simon.community.util.HostHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,19 +19,16 @@ import java.util.Date;
  * @version 1.0
  * @purpose 处理是否是登陆状态的拦截器
  */
-//@Component
+@Component
 public class LoginTicketInterceptor implements HandlerInterceptor {
 
-//    @Autowired
+    @Autowired
     private UserService userService;
 
-//    @Autowired
+    @Autowired
     private HostHolder hostHolder;
 
-    public LoginTicketInterceptor(HostHolder hostHolder, UserService userService) {
-        this.hostHolder = hostHolder;
-        this.userService = userService;
-    }
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

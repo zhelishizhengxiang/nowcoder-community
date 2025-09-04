@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -133,4 +131,45 @@ public class RedisTest {
         System.out.println(object);
 //        String key = "test:user";
     }
+
+    //演示hyperloglog
+    @Test
+    public void TestHyperLogLog() {
+        //统计20w个v重复数据的独立总数
+        String key="test:hll:01";
+        for (int i = 0; i < 100000; i++) {
+            redisTemplate.opsForHyperLogLog().add(key,i);
+        }
+
+        for (int i = 0; i < 100000; i++) {
+            redisTemplate.opsForHyperLogLog().add(key,Math.random()*10000+1);
+        }
+
+        System.out.println(redisTemplate.opsForHyperLogLog().size(key));
+
+    }
+
+    //演示bitmap
+    @Test
+    public void testBitMap() {
+        String key = "test:bit:01";
+        //bitmap的底层就是String，所以操作bitmap就是操作String
+        redisTemplate.opsForValue().setBit(key,0,true);
+        redisTemplate.opsForValue().setBit(key,4,true);
+        redisTemplate.opsForValue().setBit(key,7,true);
+        //查询
+        System.out.println(redisTemplate.opsForValue().getBit(key,0));
+        System.out.println(redisTemplate.opsForValue().getBit(key,1));
+        System.out.println(redisTemplate.opsForValue().getBit(key,4));
+        //统计
+        Object object = redisTemplate.execute(new RedisCallback() {
+            @Override
+            public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.bitCount(key.getBytes());
+            }
+        });
+        System.out.println(object);
+    }
+
+
 }
