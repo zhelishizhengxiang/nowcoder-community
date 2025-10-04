@@ -7,8 +7,10 @@ import com.simon.community.service.LikeService;
 import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.CommunityUtil;
 import com.simon.community.util.HostHolder;
+import com.simon.community.util.RedisKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +33,8 @@ public class LikeController implements CommunityConstant {
     @Autowired
     private EventProducer eventProducer;
 
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 点赞或者取消赞功能
      * @param entityType 点赞的实体对象
@@ -63,6 +66,14 @@ public class LikeController implements CommunityConstant {
                     .setData("postId",postId);
             eventProducer.fireEvent(event);
         }
+
+        //只有点赞帖子才会影响分数
+        if(entityType==ENTITY_TYPE_COMMENT){
+            //点赞或者取消点赞都会改变分数，放入缓存
+            String RedisKey= RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(RedisKey,postId);
+        }
+
 
         return CommunityUtil.getJSONString(200,"ok",map);
     }

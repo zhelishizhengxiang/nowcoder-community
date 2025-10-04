@@ -8,7 +8,9 @@ import com.simon.community.service.CommentService;
 import com.simon.community.service.DiscussPostService;
 import com.simon.community.util.CommunityConstant;
 import com.simon.community.util.HostHolder;
+import com.simon.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,9 @@ public class CommentController implements CommunityConstant {
 
     @Autowired
     private EventProducer eventProducer;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 添加评论需要在原页面展现添加了评论的效果，展现帖子详情的controller需要携带帖子id，
@@ -73,6 +78,14 @@ public class CommentController implements CommunityConstant {
                     .setEntityId(discussPostId);
             eventProducer.fireEvent(event);
         }
+
+        //对帖子评论才会使得分数增加
+        if(comment.getEntityType()==ENTITY_TYPE_COMMENT){
+            //评论后分数会变，放入缓存
+            String RedisKey= RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(RedisKey,discussPostId);
+        }
+
 
 
         return "redirect:/discussPost/detail/"+discussPostId;

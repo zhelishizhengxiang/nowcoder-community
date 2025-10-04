@@ -58,11 +58,11 @@ public class MapperTest {
 
     @Test
     public void testSelectPosts(){
-        discussPostMapper.selectDiscussPosts(0, 0, 10).forEach(System.out::println);
-        discussPostMapper.selectDiscussPosts(0,10,10).forEach(System.out::println);
+        discussPostMapper.selectDiscussPosts(0, 0, 10,0).forEach(System.out::println);
+        discussPostMapper.selectDiscussPosts(0,10,10,0).forEach(System.out::println);
         System.out.println(discussPostMapper.selectDiscussPostsCount(0));
 
-        discussPostMapper.selectDiscussPosts(149, 0, 10).forEach(System.out::println);
+        discussPostMapper.selectDiscussPosts(149, 0, 10,0).forEach(System.out::println);
         System.out.println(discussPostMapper.selectDiscussPostsCount(149));
     }
 

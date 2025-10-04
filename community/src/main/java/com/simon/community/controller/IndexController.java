@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,12 +41,12 @@ public class IndexController implements CommunityConstant {
      * 获取主页数据,通过page来封装请求数据
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String getIndexpage(Model model, Page page) {
+    public String getIndexpage(Model model, Page page,@RequestParam(name="orderMode",defaultValue = "0") int orderMode) {
         //获取数据总数和路径
         page.setRows(discussPostService.findDiscussPostsCount(0));
-        page.setPath("index");
+        page.setPath("/index?orderMode=" + orderMode);
 
-        List<DiscussPost> discussPosts = discussPostService.findDiscussPosts(0, page.getOffset(), page.getPageSize());
+        List<DiscussPost> discussPosts = discussPostService.findDiscussPosts(0, page.getOffset(), page.getPageSize(),orderMode);
         //装入帖子和发帖子的人的数据
         List<Map<String, Object>> mapList = new ArrayList<>();
         if (discussPosts != null && discussPosts.size() > 0) {
@@ -61,7 +62,8 @@ public class IndexController implements CommunityConstant {
             }
         }
         model.addAttribute("discussPosts", mapList);
-        return "index";
+        model.addAttribute("orderMode", orderMode);
+        return "/index";
     }
 
     @RequestMapping(value = "/error",method = RequestMethod.GET)

@@ -26,8 +26,8 @@ public class DiscussPostService {
     /**
      *  查询某页的数据
      */
-    public List<DiscussPost> findDiscussPosts(int userId,int offset,int limit){
-        return discussPostMapper.selectDiscussPosts(userId,offset,limit);
+    public List<DiscussPost> findDiscussPosts(int userId,int offset,int limit,int orderMode){
+        return discussPostMapper.selectDiscussPosts(userId,offset,limit,orderMode);
     }
 
     /**
@@ -64,6 +64,7 @@ public class DiscussPostService {
     /**
      *  修改帖子评论数量
      * */
+    @Transactional
     public int updateCommentCount(int id,int commentCount){
         return discussPostMapper.updatePostCommentCount(id,commentCount);
     }
@@ -71,6 +72,7 @@ public class DiscussPostService {
     /**
      * 修改帖子类型
      * */
+    @Transactional
     public void updateType(int id,int type){
         discussPostMapper.updateType(id,type);
     }
@@ -78,7 +80,16 @@ public class DiscussPostService {
     /**
      * 修改帖子状态
      * */
+    @Transactional
     public void updateStatus(int id,int status){
         discussPostMapper.updateStatus(id,status);
+    }
+
+    /**
+     * 修改帖子分数
+     * */
+    @Transactional
+    public void updateScore(int id,double score){
+        discussPostMapper.updateScore(id, score);
     }
 }

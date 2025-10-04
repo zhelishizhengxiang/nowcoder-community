@@ -10,8 +10,9 @@ public interface DiscussPostMapper {
     /**
      * 分页查询帖子
      * @param userId "我发布过"会用，正常页面展示不会用
+     * @param orderMode 排序方式，默认为创建时间,为1时是按照分数排序
      * */
-    List<DiscussPost> selectDiscussPosts(Integer userId,int offset,int limit);
+    List<DiscussPost> selectDiscussPosts(Integer userId,int offset,int limit,int orderMode);
 
     /**
      *  查询帖子总数
@@ -41,6 +42,11 @@ public interface DiscussPostMapper {
      * 修改帖子类型
      * */
     int updateType(int id,int type);
+
+    /**
+     * 更新帖子分数
+     * */
+    int updateScore(int id,double score);
 
 
 }

@@ -26,6 +26,9 @@ public class RedisKeyUtil {
 
     private static final String PREFIX_DAU="dau";
 
+    private static final String PREFIX_POST="post";
+
+
 
 
     /**
@@ -103,9 +106,16 @@ public class RedisKeyUtil {
     }
 
     /**
-     * 生成一段时间的活跃哦用的key
+     * 生成一段时间的活跃的key
      * */
     public static String getDauKey(String startDate,String endDate){
         return PREFIX_DAU+SPLIT+startDate+SPLIT+endDate;
+    }
+
+    /**
+     * 生成统计分数的帖子的key
+     * */
+    public static String getPostScoreKey(){
+        return PREFIX_POST+SPLIT+"score";
     }
 }

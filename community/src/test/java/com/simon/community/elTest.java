@@ -42,10 +42,10 @@ public class elTest {
 
     @Test
     public void testInsertList() {
-        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,0,100));
-        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,100,100));
-        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,200,100));
-        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,300,100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,0,100,0));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,100,100,0));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,200,100,0));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(null,300,100,0));
     }
 
     @Test
