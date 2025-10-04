@@ -11,9 +11,11 @@ import com.simon.community.util.CommunityConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +36,12 @@ public class EventConsumer implements CommunityConstant {
 
     @Autowired
     private ElasticsearchService  elasticsearchService;
+
+    @Value("${wk.image.storage}")
+    private String wkImageStorage;
+
+    @Value("${wk.image.command}")
+    private String wkImageCmd;
 
     /**
      * 消费事件：给用户发送通知，即向message中插入数据
@@ -111,5 +119,36 @@ public class EventConsumer implements CommunityConstant {
 
 
     }
+
+    /**
+     * 消费分享事件：生成的长图
+     * */
+    @KafkaListener(topics = TOPIC_SHARE)
+    public void consumShareMessage(ConsumerRecord<?,String> record) {
+        if(record==null || record.value()==null){
+            log.error("消息的内容为空");
+            return;
+        }
+        Event event = JSONObject.parseObject(record.value(), Event.class);
+        if(event==null){
+            log.error("消息格式错误");
+        }
+
+        String htmlUrl= (String) event.getData().get("htmlUrl");
+        String fileName= (String) event.getData().get("filename");
+        String suffix= (String) event.getData().get("suffix");
+
+        String cmd=wkImageCmd+" --quality 75 "
+                +htmlUrl+" "+wkImageStorage +"/"+fileName+suffix;
+        //执行该命令
+        try {
+            Runtime.getRuntime().exec(cmd);
+            log.info("生成长图成功"+cmd);
+        } catch (IOException e) {
+           log.error("生成长图失败"+e.getMessage());
+
+        }
+    }
+
 
 }

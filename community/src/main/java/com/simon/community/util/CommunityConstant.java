@@ -71,6 +71,11 @@ public interface CommunityConstant {
      * */
     String TOPIC_DELETE="delete";
 
+    /**
+     * 事件主题：分享
+     * */
+    String TOPIC_SHARE="share";
+
 
 
     /**
