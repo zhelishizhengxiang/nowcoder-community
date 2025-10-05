@@ -118,4 +118,18 @@ public class RedisKeyUtil {
     public static String getPostScoreKey(){
         return PREFIX_POST+SPLIT+"score";
     }
+    
+    /**
+     * 生成帖子列表缓存的key
+     * */
+    public static String getPostListKey(int offset, int limit){
+        return PREFIX_POST+SPLIT+"list"+SPLIT+offset+SPLIT+limit;
+    }
+    
+    /**
+     * 生成帖子总数缓存的key
+     * */
+    public static String getPostRowsKey(int userId){
+        return PREFIX_POST+SPLIT+"rows"+SPLIT+userId;
+    }
 }

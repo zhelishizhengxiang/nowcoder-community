@@ -23,7 +23,7 @@ public class RedisConfig {
         //为创建的 RedisTemplate 设置连接工厂，使其能够通过连接工厂获取 Redis 连接
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
-        //设置key序列化方式：字符串的徐磊话方式
+        //设置key序列化方式：字符串的序列化方式
         redisTemplate.setKeySerializer(RedisSerializer.string());
         //设置value的序列化方式：json
         redisTemplate.setValueSerializer(RedisSerializer.json());
