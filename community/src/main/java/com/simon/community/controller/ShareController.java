@@ -42,9 +42,13 @@ public class ShareController implements CommunityConstant {
     @Value("${wk.image.storage}")
     private String wkImageStorage;
 
+
+    @Value("${qiniu.bucket.header.url}")
+    private String shareBucketUrl;
+
     /**
      * @param htmlUrl 网页的url
-     * 交给kafka来异步生成分享的图片
+     * 交给kafka来异步生成分享的图片,
      * */
     @RequestMapping(path = "/share",method = RequestMethod.GET)
     @ResponseBody
@@ -59,15 +63,16 @@ public class ShareController implements CommunityConstant {
                 .setData("suffix",".png");
         eventProducer.fireEvent(event);
         Map<String,Object> map=new HashMap<>();
-        map.put("shareUrl",domain+contextPath+"/share/image/"+filename);
+        map.put("shareUrl",shareBucketUrl+"/"+filename);
 
         //返回访问路径
         return CommunityUtil.getJSONString(200,null,map);
     }
 
     /**
-     * 获取长图
+     * 从本地获取长图，已经废弃
      * */
+    @Deprecated
     @RequestMapping(path = "/share/image/{fileName}",method = RequestMethod.GET)
     public void getShareImage(@PathVariable("fileName") String fileName, HttpServletResponse response){
         if(StringUtils.isBlank(fileName)){
@@ -84,7 +89,7 @@ public class ShareController implements CommunityConstant {
                 outputStream.write(buf,0,b);
             }
         } catch (IOException e) {
-            log.error("获取长途失败"+e.getMessage());
+            log.error("获取长图失败"+e.getMessage());
         }
 
     }
