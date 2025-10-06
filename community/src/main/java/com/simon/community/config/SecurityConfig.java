@@ -56,7 +56,8 @@ public class SecurityConfig  implements CommunityConstant {
                              "/follow",
                              "/unfollow").authenticated()
                      .requestMatchers("/discussPost/delete",
-                             "/data/**").hasAuthority(AUTHORITY_ADMIN)
+                             "/data/**",
+                             "/actuator/**").hasAuthority(AUTHORITY_ADMIN)
                      .requestMatchers("/discussPost/top",
                              "/discussPost/wonderful").hasAuthority(AUTHORITY_MODERATOR)
                      .anyRequest().permitAll()//除了上面设置的地址需要登录访问,其它所有的请求地址可与直接访问
